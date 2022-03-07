@@ -1,0 +1,30 @@
+<hello name="{{ name }}"></hello>
+<div>
+  <div *ngFor="let file of depictObjectKeyType(data)">
+    <h2>{{ file }}</h2>
+    <div *ngFor="let d of depictObjectKeyType(data[file])">
+      <h2>{{ d }}</h2>
+      <div *ngFor="let w of data[file][d]">
+        <div *ngFor="let w1 of depictObjectKeyType(w)">
+          <div *ngFor="let w2 of w[w1]">
+            <div>{{ w2.name }}</div>
+            <div>
+              <input
+                *ngIf="w2.type != 'file'"
+                [type]="w2.type"
+                [(ngModel)]="w2.value"
+              />
+              <input
+                *ngIf="w2.type == 'file'"
+                [type]="w2.type"
+                (change)="onFileChanged($event)"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <input type="button" (click)="log()" value="Log Changes" />
+</div>
