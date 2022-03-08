@@ -15,9 +15,10 @@
                 [(ngModel)]="w2.value"
               />
               <input
-                *ngIf="w2.type == 'file'"
+                *ngIf="w2.type == 'file'" 
                 [type]="w2.type"
-                (change)="onFileChanged($event)"
+                [(ngModel)]="w2.value"
+                (change)="onFileChanged($event, fixSpace(file)+'_'+fixSpace(d)+'_'+fixSpace(w1)+'_'+fixSpace(w2.name))"
               />
             </div>
           </div>

@@ -9,7 +9,7 @@ export class AppComponent {
   name = 'Dynamic Data';
 
   public data: MainData;
-
+  files = new Map<string, string>();
   ngOnInit() {
     let d = {
       'Nokia CNRD-DB': {
@@ -33,7 +33,7 @@ export class AppComponent {
               },
               {
                 name: 'FILE-Istio-NodeSelect',
-                type: 'text',
+                type: 'file',
                 value: '',
               },
               {
@@ -138,7 +138,7 @@ export class AppComponent {
               },
               {
                 name: 'values',
-                type: File,
+                type: 'file',
                 value: '',
               },
             ],
@@ -196,20 +196,46 @@ export class AppComponent {
       },
     };
     this.data = d;
-    console.log(this.data);
+    console.log(JSON.stringify(this.data));
   }
-
+  public fixSpace(input: any): string {
+    return input.replace(/\s+/g, '').trim();
+  }
   log() {
+    console.log(JSON.stringify(this.files));
+
+    for (let file of this.depictObjectKeyType(this.data)) {
+      for (let d of this.depictObjectKeyType(this.data[file])) {
+        for (let w of this.data[file][d]) {
+          for (let w1 of this.depictObjectKeyType(w)) {
+            for (let w2 of w[w1]) {
+              if (w2.type == 'file') {
+                let aa =
+                  this.fixSpace(file) +
+                  '_' +
+                  this.fixSpace(d) +
+                  '_' +
+                  this.fixSpace(w1) +
+                  '_' +
+                  this.fixSpace(w2.name);
+                w2.data = this.files.get(aa);
+                console.log(JSON.stringify(w2));
+              }
+            }
+          }
+        }
+      }
+    }
+
     console.log(this.data);
   }
   depictObjectKeyType<O>(o: O) {
     return Object.keys(o) as (keyof O)[];
   }
-  onFileChanged(event) {
-    this.img = event.target.files[0];
+  onFileChanged(event, id) {
+    this.files.set(id, event.target.files[0].name);
   }
 }
-
 
 class MainData {
   [index: string]: any;
