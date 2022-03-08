@@ -233,7 +233,20 @@ export class AppComponent {
     return Object.keys(o) as (keyof O)[];
   }
   onFileChanged(event, id) {
-    this.files.set(id, event.target.files[0].name);
+    let file = event.target.files[0];
+    this.getBase64(file).then((data) => {
+      let fileContent: any = data;
+      this.files.set(id, fileContent);
+      console.log(fileContent);
+    });
+  }
+  getBase64(file) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = (error) => reject(error);
+    });
   }
 }
 
